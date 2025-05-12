@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
-import Button from '@/components/Button';
+import React from 'react';
+import { useState } from 'react';
+import Button from '../../../components/Button';
 
 const CATEGORIES = [
   { id: 'all', name: 'All Videos' },

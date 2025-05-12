@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Video } from '@/types';
+import { Video } from '../../types';
 
 interface VideoPlayerProps {
   video: Video;

@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { uploadVideo, uploadPublicVideo } from '../../firebase/storage';
+import { uploadVideo, uploadPublicVideo } from '../../firebase/videoUpload';
 import { useAuth } from '../../context/AuthContext';
 
 interface VideoUploadProps {

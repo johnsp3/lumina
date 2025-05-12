@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Video } from '@/types';
-import { useVideo } from '@/context/VideoContext';
+import { Video } from '../../types';
+import { useVideo } from '../../context/VideoContext';
+import { DeleteVideoButton } from '../Button';
 
 interface ThumbnailProps {
   video: Video;
@@ -10,12 +11,13 @@ interface ThumbnailProps {
 }
 
 export default function Thumbnail({ video, onClick }: ThumbnailProps) {
-  const { addToFavorites, removeFromFavorites, updateVideoTitle } = useVideo();
+  const { addToFavorites, removeFromFavorites, updateVideoTitle, deleteVideoFromState } = useVideo();
   const [isHovered, setIsHovered] = useState(false);
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [newTitle, setNewTitle] = useState(video.title);
 
-  const formatDuration = (seconds: number) => {
+  const formatDuration = (seconds: number | undefined) => {
+    if (seconds === undefined) return '0:00';
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
@@ -52,7 +54,7 @@ export default function Thumbnail({ video, onClick }: ThumbnailProps) {
 
   return (
     <div 
-      className="video-thumbnail"
+      className="video-thumbnail group"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={onClick}
@@ -61,11 +63,19 @@ export default function Thumbnail({ video, onClick }: ThumbnailProps) {
       <div className="aspect-video relative overflow-hidden">
         {/* Video preview image */}
         <div className="w-full h-full bg-zinc-200">
-          <img 
-            src={video.thumbnail} 
-            alt={video.title}
-            className="w-full h-full object-cover"
-          />
+          {video.thumbnail ? (
+            <img 
+              src={video.thumbnail} 
+              alt={video.title}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-gray-300">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="5 3 19 12 5 21 5 3" />
+              </svg>
+            </div>
+          )}
         </div>
         
         {/* Duration badge */}
@@ -99,6 +109,15 @@ export default function Thumbnail({ video, onClick }: ThumbnailProps) {
             </svg>
           )}
         </button>
+
+        {/* Delete button */}
+        {video.filePath && (
+          <DeleteVideoButton 
+            videoId={video.id}
+            videoPath={video.filePath}
+            onDeleteSuccess={() => deleteVideoFromState(video.id)}
+          />
+        )}
       </div>
       
       {/* Video title */}
@@ -125,11 +144,14 @@ export default function Thumbnail({ video, onClick }: ThumbnailProps) {
           </h3>
         )}
         <p className="text-xs text-zinc-500 mt-1">
-          {new Date(video.dateAdded).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric'
-          })}
+          {video.dateAdded ? 
+            new Date(video.dateAdded).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric'
+            }) : 
+            video.date || "No date"
+          }
         </p>
       </div>
     </div>

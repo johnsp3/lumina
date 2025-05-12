@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import VideoUpload from '../components/VideoUpload/VideoUpload';
+import VideoCard from '../components/VideoCard';
 import { useAuth } from '../context/AuthContext';
 import { logOut } from '../firebase/auth';
-import { getUserVideos, getPublicVideos } from '../firebase/storage';
+import { getUserVideos, getPublicVideos } from '../firebase/videoRetrieval';
 
 function Gallery() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -43,14 +44,20 @@ function Gallery() {
             title: video.name.split('_').slice(1).join('_'), // Remove timestamp prefix
             src: video.downloadURL,
             date: new Date(parseInt(video.name.split('_')[0])).toLocaleDateString(),
-            isPublic: false
+            isPublic: false,
+            isFavorite: video.metadata?.isFavorite || false, // Use metadata from Firebase
+            categories: video.metadata?.categories || ['all'], // Use categories from Firebase
+            filePath: video.fullPath // Add the full path for deletion
           })),
           ...publicVideos.map(video => ({
             id: video.name,
             title: video.name.split('_').slice(1).join('_'), // Remove timestamp prefix
             src: video.downloadURL,
             date: new Date(parseInt(video.name.split('_')[0])).toLocaleDateString(),
-            isPublic: true
+            isPublic: true,
+            isFavorite: video.metadata?.isFavorite || false, // Use metadata from Firebase
+            categories: video.metadata?.categories || ['all', 'interesting'], // Use categories from Firebase
+            filePath: video.fullPath // Add the full path for deletion
           }))
         ];
         
@@ -94,7 +101,8 @@ function Gallery() {
   // Filter videos based on active category and search query
   const filteredVideos = videos.filter(video => {
     // Handle category filtering
-    if (activeCategory === 'interesting' && !video.isPublic) return false;
+    if (activeCategory === 'favorites' && !video.isFavorite) return false;
+    if (activeCategory === 'interesting' && !video.categories?.includes('interesting')) return false;
     
     // Handle search filtering
     if (searchQuery && !video.title.toLowerCase().includes(searchQuery.toLowerCase())) {
@@ -170,8 +178,9 @@ function Gallery() {
               <video
                 src={videos[0].src}
                 controls
-                className="w-full h-full"
+                className="w-full h-full featured-video"
                 poster={videos[0].thumbnailUrl}
+                key={videos[0].id}
               />
             ) : (
               <p className="text-white">No video selected</p>
@@ -226,28 +235,17 @@ function Gallery() {
               </div>
             ) : filteredVideos.length > 0 ? (
               filteredVideos.map((video) => (
-                <div key={video.id} className="video-thumbnail cursor-pointer">
-                  <div className="aspect-video bg-gray-200 flex items-center justify-center">
-                    {/* Use video first frame as thumbnail by showing video tag without controls */}
-                    <video
-                      src={video.src}
-                      className="w-full h-full object-cover"
-                      preload="metadata"
-                      muted
-                      onClick={() => {
-                        const videoEl = document.querySelector('.featured-video');
-                        if (videoEl) {
-                          videoEl.src = video.src;
-                          videoEl.play();
-                        }
-                      }}
-                    />
-                  </div>
-                  <div className="p-3">
-                    <h3 className="text-sm font-medium truncate">{video.title}</h3>
-                    <p className="text-xs text-gray-500 mt-1">{video.date}</p>
-                  </div>
-                </div>
+                <VideoCard
+                  key={video.id}
+                  video={video}
+                  onClick={() => {
+                    const videoEl = document.querySelector('.featured-video');
+                    if (videoEl) {
+                      videoEl.src = video.src;
+                      videoEl.play();
+                    }
+                  }}
+                />
               ))
             ) : (
               <div className="col-span-full text-center py-12 text-gray-500">
@@ -299,4 +297,4 @@ function Gallery() {
   );
 }
 
-export default Gallery; 
+export default Gallery;

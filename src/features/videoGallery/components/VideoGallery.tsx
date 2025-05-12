@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useMemo } from 'react';
-import Thumbnail from '@/components/Thumbnail';
-import { useVideo } from '@/context/VideoContext';
-import { Video } from '@/types';
+import { useState } from 'react';
+import Thumbnail from '../../../components/Thumbnail';
+import { useVideo } from '../../../context/VideoContext';
+import { Video } from '../../../types';
 
 interface VideoGalleryProps {
   category: string;

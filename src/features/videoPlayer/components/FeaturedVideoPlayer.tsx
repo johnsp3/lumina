@@ -1,9 +1,10 @@
 'use client';
 
-import { useVideo } from '@/context/VideoContext';
-import VideoPlayer from '@/components/VideoPlayer';
-import Button from '@/components/Button';
-import React, { useState } from 'react';
+import React from 'react';
+import { useVideo } from '../../../context/VideoContext';
+import VideoPlayer from '../../../components/VideoPlayer';
+import Button from '../../../components/Button';
+import { useState } from 'react';
 
 export default function FeaturedVideoPlayer() {
   const { currentVideo, addToFavorites, removeFromFavorites } = useVideo();
@@ -40,11 +41,11 @@ export default function FeaturedVideoPlayer() {
               <div>
                 <h1 className="text-xl sm:text-2xl font-semibold text-zinc-900">{currentVideo.title}</h1>
                 <p className="text-zinc-500 mt-1">
-                  Added on {new Date(currentVideo.dateAdded).toLocaleDateString('en-US', {
+                  Added on {currentVideo.dateAdded ? new Date(currentVideo.dateAdded).toLocaleDateString('en-US', {
                     year: 'numeric', 
                     month: 'long', 
                     day: 'numeric'
-                  })}
+                  }) : 'Unknown date'}
                 </p>
               </div>
               
@@ -94,7 +95,7 @@ export default function FeaturedVideoPlayer() {
                   </div>
                   <div>
                     <p className="text-zinc-500">Duration</p>
-                    <p>{Math.floor(currentVideo.duration / 60)}m {currentVideo.duration % 60}s</p>
+                    <p>{currentVideo.duration ? `${Math.floor(currentVideo.duration / 60)}m ${currentVideo.duration % 60}s` : 'Unknown'}</p>
                   </div>
                   <div>
                     <p className="text-zinc-500">Categories</p>

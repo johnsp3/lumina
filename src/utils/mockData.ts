@@ -1,4 +1,4 @@
-import { Video } from '@/types';
+import { Video } from '../types';
 
 // List of demo 4K videos from mixkit.co (free stock videos)
 export const mockVideos: Video[] = [
