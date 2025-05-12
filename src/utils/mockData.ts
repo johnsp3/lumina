@@ -1,0 +1,65 @@
+import { Video } from '@/types';
+
+// List of demo 4K videos from mixkit.co (free stock videos)
+export const mockVideos: Video[] = [
+  {
+    id: '1',
+    title: 'Aerial view of beach',
+    src: 'https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-a-turquoise-beach-and-a-boat-4785-large.mp4',
+    thumbnail: 'https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-a-turquoise-beach-and-a-boat-4785-large.mp4',
+    duration: 19,
+    dateAdded: '2023-06-12T10:30:00Z',
+    categories: ['all', 'interesting'],
+    isFavorite: true,
+  },
+  {
+    id: '2',
+    title: 'Waves crashing on rocks',
+    src: 'https://assets.mixkit.co/videos/preview/mixkit-waves-coming-to-the-coast-aerial-shot-4065-large.mp4',
+    thumbnail: 'https://assets.mixkit.co/videos/preview/mixkit-waves-coming-to-the-coast-aerial-shot-4065-large.mp4',
+    duration: 29,
+    dateAdded: '2023-05-18T14:20:00Z',
+    categories: ['all'],
+    isFavorite: false,
+  },
+  {
+    id: '3',
+    title: 'City traffic at night',
+    src: 'https://assets.mixkit.co/videos/preview/mixkit-light-traffic-on-a-street-at-night-4236-large.mp4',
+    thumbnail: 'https://assets.mixkit.co/videos/preview/mixkit-light-traffic-on-a-street-at-night-4236-large.mp4',
+    duration: 13,
+    dateAdded: '2023-04-25T19:45:00Z',
+    categories: ['all', 'interesting'],
+    isFavorite: true,
+  },
+  {
+    id: '4',
+    title: 'Sunset over mountains',
+    src: 'https://assets.mixkit.co/videos/preview/mixkit-landscape-of-mountains-and-sunset-3128-large.mp4',
+    thumbnail: 'https://assets.mixkit.co/videos/preview/mixkit-landscape-of-mountains-and-sunset-3128-large.mp4',
+    duration: 21,
+    dateAdded: '2023-07-03T21:15:00Z',
+    categories: ['all'],
+    isFavorite: false,
+  },
+  {
+    id: '5',
+    title: 'Woman walking on beach',
+    src: 'https://assets.mixkit.co/videos/preview/mixkit-young-woman-walking-on-a-beach-barefoot-4663-large.mp4',
+    thumbnail: 'https://assets.mixkit.co/videos/preview/mixkit-young-woman-walking-on-a-beach-barefoot-4663-large.mp4',
+    duration: 15,
+    dateAdded: '2023-06-28T16:50:00Z',
+    categories: ['all', 'interesting'],
+    isFavorite: false,
+  },
+  {
+    id: '6',
+    title: 'Aerial forest view',
+    src: 'https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-a-forest-on-a-sunny-afternoon-40647-large.mp4',
+    thumbnail: 'https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-a-forest-on-a-sunny-afternoon-40647-large.mp4',
+    duration: 24,
+    dateAdded: '2023-05-10T09:25:00Z',
+    categories: ['all'],
+    isFavorite: true,
+  }
+]; 

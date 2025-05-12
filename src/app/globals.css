@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body {
+    @apply antialiased text-gray-900 bg-white;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  }
+}
+
+@layer components {
+  .container-padding {
+    @apply px-4 sm:px-6 lg:px-8;
+  }
+  
+  .transition-standard {
+    @apply transition-all duration-300 ease-in-out;
+  }
+  
+  .video-thumbnail {
+    @apply relative rounded-md overflow-hidden bg-gray-100 shadow-subtle hover:shadow-medium hover:scale-[1.02] transition-standard;
+  }
+  
+  .category-button {
+    @apply px-4 py-2 rounded-full text-sm font-medium transition-standard;
+  }
+  
+  .category-button-active {
+    @apply bg-blue-500 text-white;
+  }
+  
+  .category-button-inactive {
+    @apply bg-gray-100 text-gray-600 hover:bg-gray-200;
+  }
+
+  .text-zinc-400 {
+    color: var(--color-zinc-400);
+  }
+  
+  .text-zinc-500 {
+    color: var(--color-zinc-500);
+  }
+  
+  .text-zinc-600 {
+    color: var(--color-zinc-600);
+  }
+  
+  .text-zinc-700 {
+    color: var(--color-zinc-700);
+  }
+  
+  .text-zinc-800 {
+    color: var(--color-zinc-800);
+  }
+  
+  .text-zinc-900 {
+    color: var(--color-zinc-900);
+  }
+  
+  .bg-zinc-100 {
+    background-color: var(--color-zinc-100);
+  }
+  
+  .bg-zinc-200 {
+    background-color: var(--color-zinc-200);
+  }
+} 
