@@ -1,31 +1,51 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { auth } from '../firebase';
 import { User } from 'firebase/auth';
 
 interface AuthContextType {
   currentUser: User | null;
   loading: boolean;
+  isAuthorized: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// Define authorized email
+const AUTHORIZED_EMAIL = 'jchezik@gmail.com';
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isAuthorized, setIsAuthorized] = useState(false);
   
   useEffect(() => {
     // Listen for auth state changes
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setCurrentUser(user);
-      setLoading(false);
-      
-      // For debugging
       if (user) {
-        console.log("User authenticated:", user.email);
+        // Check if user is authorized
+        if (user.email === AUTHORIZED_EMAIL) {
+          console.log("Authorized user authenticated:", user.email);
+          setCurrentUser(user);
+          setIsAuthorized(true);
+        } else {
+          console.log("Unauthorized user attempted access:", user.email);
+          // Sign out unauthorized users
+          signOut(auth).then(() => {
+            console.log('Unauthorized user signed out');
+            setCurrentUser(null);
+            setIsAuthorized(false);
+          }).catch((error) => {
+            console.error('Error signing out unauthorized user:', error);
+          });
+        }
       } else {
         console.log("No user authenticated");
+        setCurrentUser(null);
+        setIsAuthorized(false);
       }
+      
+      setLoading(false);
     });
     
     // Clean up subscription
@@ -35,7 +55,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Context value
   const value = {
     currentUser,
-    loading
+    loading,
+    isAuthorized
   };
   
   return (

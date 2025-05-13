@@ -1,0 +1,50 @@
+// Firebase Authentication Configuration
+
+// 1. In Firebase console:
+// - Enable only Google sign-in method
+// - Disable "One account per email address" if it's enabled
+
+// 2. Add this code to your Firebase functions or admin backend:
+
+const admin = require('firebase-admin');
+
+// Function to authorize specific users
+exports.authorizeUser = functions.auth.user().onCreate(async (user) => {
+  // Allow only jchezik@gmail.com
+  if (user.email === 'jchezik@gmail.com') {
+    // Set custom claims for authorized user
+    await admin.auth().setCustomUserClaims(user.uid, { authorized: true });
+    return null;
+  } else {
+    // Delete unauthorized users immediately
+    try {
+      await admin.auth().deleteUser(user.uid);
+      console.log('Unauthorized user deleted:', user.email);
+    } catch (error) {
+      console.error('Error deleting unauthorized user:', error);
+    }
+    return null;
+  }
+});
+
+// 3. Alternative approach (if Firebase Functions not available):
+// Manually verify in your React application:
+
+/*
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+
+const auth = getAuth();
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // Check if user email is authorized
+    if (user.email !== 'jchezik@gmail.com') {
+      // Sign out unauthorized users
+      signOut(auth).then(() => {
+        console.log('Unauthorized user signed out');
+      }).catch((error) => {
+        console.error('Error signing out unauthorized user:', error);
+      });
+    }
+  }
+});
+*/ 
